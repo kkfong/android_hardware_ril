@@ -151,3 +151,5 @@
     {RIL_REQUEST_PULL_LCEDATA, dispatchVoid, responseLceData},
     {RIL_REQUEST_GET_ACTIVITY_INFO, dispatchVoid, responseActivityData},
     {RIL_REQUEST_SIM_GET_ATR, dispatchInts, responseString},
+    {0, NULL, NULL},
+    {RIL_REQUEST_SET_MAX_TRANSMIT_POWER, dispatchSetMaxTransmitPower, responseVoid},

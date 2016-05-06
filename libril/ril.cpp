@@ -271,6 +271,7 @@ static void dispatchUiccSubscripton(Parcel &p, RequestInfo *pRI);
 static void dispatchSimAuthentication(Parcel &p, RequestInfo *pRI);
 static void dispatchDataProfile(Parcel &p, RequestInfo *pRI);
 static void dispatchRadioCapability(Parcel &p, RequestInfo *pRI);
+static void dispatchSetMaxTransmitPower(Parcel &p, RequestInfo *pRI);
 static int responseInts(Parcel &p, void *response, size_t responselen);
 static int responseFailCause(Parcel &p, void *response, size_t responselen);
 static int responseStrings(Parcel &p, void *response, size_t responselen);
@@ -2044,6 +2045,37 @@ static void dispatchRadioCapability(Parcel &p, RequestInfo *pRI){
                 &rc,
                 sizeof(RIL_RadioCapability),
                 pRI, pRI->socket_id);
+    return;
+invalid:
+    invalidCommandBlock(pRI);
+    return;
+}
+
+static void dispatchSetMaxTransmitPower(Parcel &p, RequestInfo *pRI) {
+    RIL_RfControlState state;
+    int32_t t;
+    status_t status;
+
+    memset(&state, 0, sizeof(state));
+    status = p.readInt32(&t);
+    if (status != NO_ERROR) {
+        RLOGE("__func__ ERROR");
+        goto invalid;
+    }
+    state.state = (int)t;
+    RLOGI("__func__ : %d\n", state.state);
+
+    startRequest;
+    appendPrintBuf("%sstate.state=%d", printBuf, state.state);
+    closeRequest;
+    printRequest(pRI->token, pRI->pCI->requestNumber);
+
+    CALL_ONREQUEST(pRI->pCI->requestNumber, &state, sizeof(state), pRI, pRI->socket_id);
+
+#ifdef MEMSET_FREED
+    memset(&state, 0, sizeof(state));
+#endif
+
     return;
 invalid:
     invalidCommandBlock(pRI);

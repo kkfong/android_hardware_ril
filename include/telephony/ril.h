@@ -1507,6 +1507,10 @@ typedef struct {
   uint32_t rx_mode_time_ms;
 } RIL_ActivityStatsInfo;
 
+  typedef struct {
+    int state;
+} RIL_RfControlState;
+
 /**
  * RIL_REQUEST_GET_SIM_STATUS
  *
@@ -4552,6 +4556,16 @@ typedef struct {
  * GENERIC_FAILURE
  */
 #define RIL_REQUEST_SIM_GET_ATR 136
+
+/**
+ * RIL_REQUEST_SET_MAX_TRANSMIT_POWER
+ *
+ * Sends the request to enable or disable MAX transmit power control option
+ *
+ * "response" is void
+ */
+
+#define RIL_REQUEST_SET_MAX_TRANSMIT_POWER 139
 
 /***********************************************************************/
 
